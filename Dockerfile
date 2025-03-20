@@ -13,10 +13,11 @@ COPY Gemfile Gemfile.lock kamal.gemspec ./
 COPY lib/kamal/version.rb /kamal/lib/kamal/version.rb
 
 # Install system dependencies
-RUN apk add --no-cache build-base git docker openrc openssh-client-default yaml-dev \
+RUN apk add --no-cache build-base git docker openrc openssh-client-default yaml-dev npm \
     && rc-update add docker boot \
     && gem install bundler --version=2.6.5 \
-    && bundle install
+    && bundle install \
+    && npm install -g @bitwarden/cli 
 
 # Copy the rest of our application code into the container.
 # We do this after bundle install, to avoid having to run bundle
