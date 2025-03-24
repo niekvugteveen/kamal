@@ -1,15 +1,16 @@
 class Kamal::Secrets::Adapters::Bitwarden < Kamal::Secrets::Adapters::Base
+  def fetch(secrets, account: nil, from: nil, server: nil)
+    raise RuntimeError, "Missing required option '--account'" if requires_account? && account.blank?
+
+    check_dependencies!
+    configserver(server) if server
+
+    session = login(account)
+    fetch_secrets(secrets, from: from, account: account, session: session)
+  end
+
   private
-    def fetch(secrets, account: nil, from: nil, server: nil)
-      raise RuntimeError, "Missing required option '--account'" if requires_account? && account.blank?
-
-      check_dependencies!
-      configserver(server) if server
-
-      session = login(account)
-      fetch_secrets(secrets, from: from, account: account, session: session)
-    end
-
+   
     def configserver(server)
       # expects a value like https://vault.bitwarden.eu
       run_command("config server #{server}")
