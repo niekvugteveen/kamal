@@ -1,3 +1,4 @@
+# SECRETS=$(kamal secrets fetch --adapter bitwarden --account nvugteveen@gmail.com --server https://vault.bitwarden.eu TEST)
 class Kamal::Secrets::Adapters::Bitwarden < Kamal::Secrets::Adapters::Base
   def fetch(secrets, account: nil, from: nil, server: nil)
     raise RuntimeError, "Missing required option '--account'" if requires_account? && account.blank?
@@ -82,7 +83,9 @@ class Kamal::Secrets::Adapters::Bitwarden < Kamal::Secrets::Adapters::Base
 
     def run_command(command, session: nil, raw: false)
       full_command = [ *("BW_SESSION=#{session.shellescape}" if session), "bw", command ].join(" ")
+      puts full_command
       result = `#{full_command}`.strip
+      puts result
       raw ? result : JSON.parse(result)
     end
 
