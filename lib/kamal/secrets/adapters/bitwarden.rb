@@ -14,7 +14,7 @@ class Kamal::Secrets::Adapters::Bitwarden < Kamal::Secrets::Adapters::Base
    
     def configserver(server)
       # expects a value like https://vault.bitwarden.eu
-      run_command("config server #{server}")
+      run_command("config server #{server}", raw: true)
     end
 
     def login(account)
