@@ -1,10 +1,9 @@
 class Kamal::Commands::Registry < Kamal::Commands::Base
   def login(registry_config: nil)
     registry_config ||= config.registry
-    logline = "Logging in to #{registry_config.server} with #{registry_config.username} and password #{registry_config.password}..."
-    puts logline
-    SSHKit.config.output.debug(logline)
-
+    
+    # we use the proper login method for the registry that does not run into authentication errors
+    # when using Github action for example
     echo_password = [ :echo, sensitive(Kamal::Utils.escape_shell_value(registry_config.password)) ]
     docker_login = docker :login,
                           registry_config.server,
